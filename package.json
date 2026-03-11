@@ -1,0 +1,9 @@
+{
+  "name": "bfc-charity-platform",
+  "version": "1.0.0",
+  "description": "Bright Future Charity platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
