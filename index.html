@@ -1,18 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Bright Future Charity</title>
+  <title>Bright Future Charity</title>
 </head>
-
 <body>
+  <h1>Bright Future Charity</h1>
 
-<h1>Bright Future Charity</h1>
+  <h2>Upcoming Events</h2>
+  <ul id="eventsList"></ul>
 
-<p>Welcome to the BFC online platform.</p>
+  <h2>Volunteer Signup</h2>
+  <form id="volunteerForm">
+    <input type="text" id="name" placeholder="Name" required><br><br>
+    <input type="email" id="email" placeholder="Email" required><br><br>
+    <input type="text" id="phone" placeholder="Phone"><br><br>
+    <input type="text" id="availability" placeholder="Availability"><br><br>
+    <input type="text" id="skills" placeholder="Skills"><br><br>
+    <button type="submit">Register</button>
+  </form>
 
-<h2>Upcoming Events</h2>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
-<ul id="events"></ul>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "fine-bearing-423410-f5.firebaseapp.com",
+      projectId: "fine-bearing-423410-f5",
+      storageBucket: "fine-bearing-423410-f5.firebasestorage.app",
+      messagingSenderId: "374701305057",
+      appId: "1:374701305057:web:372f2321e1a58cb89adba0"
+    };
 
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function loadEvents() {
+      const querySnapshot = await getDocs(collection(db, "events"));
+      const eventsList = document.getElementById("eventsList");
+      eventsList.innerHTML = "";
+
+      querySnapshot.forEach((doc) => {
+        const event = doc.data();
+        const li = document.createElement("li");
+        li.textContent = `${event.title} - ${event.date} - ${event.location}`;
+        eventsList.appendChild(li);
+      });
+    }
+
+    document.getElementById("volunteerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      await addDoc(collection(db, "volunteer_signups"), {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        availability: document.getElementById("availability").value,
+        skills: document.getElementById("skills").value,
+        status: "new",
+        createdAt: new Date().toISOString()
+      });
+
+      alert("Volunteer signup submitted.");
+      document.getElementById("volunteerForm").reset();
+    });
+
+    loadEvents();
+  </script>
 </body>
 </html>
