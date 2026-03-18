@@ -21,49 +21,96 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      addDoc,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
+      apiKey: "AIzaSyBVLRTlUHz3m2Eu2NAVYEtzosRQpouVDIU",
       authDomain: "fine-bearing-423410-f5.firebaseapp.com",
       projectId: "fine-bearing-423410-f5",
       storageBucket: "fine-bearing-423410-f5.firebasestorage.app",
       messagingSenderId: "374701305057",
-      appId: "1:374701305057:web:372f2321e1a58cb89adba0"
+      appId: "1:374701305057:web:d0247e3cdf7adc389adba0",
+      measurementId: "G-45SBMMDK4R"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
     async function loadEvents() {
-      const querySnapshot = await getDocs(collection(db, "events"));
       const eventsList = document.getElementById("eventsList");
-      eventsList.innerHTML = "";
+      eventsList.innerHTML = "<li>Loading events...</li>";
 
-      querySnapshot.forEach((doc) => {
-        const event = doc.data();
-        const li = document.createElement("li");
-        li.textContent = `${event.title} - ${event.date} - ${event.location}`;
-        eventsList.appendChild(li);
-      });
+      try {
+        const eventsQuery = query(collection(db, "events"), orderBy("date"));
+        const snapshot = await getDocs(eventsQuery);
+
+        eventsList.innerHTML = "";
+
+        if (snapshot.empty) {
+          eventsList.innerHTML = "<li>No events found.</li>";
+          return;
+        }
+
+        snapshot.forEach((docSnap) => {
+          const event = docSnap.data();
+          const li = document.createElement("li");
+
+          const title = event.title || "Untitled event";
+          const date = event.date || "No date set";
+          const location = event.location || "No location set";
+          const capacity = event.capacity ?? "N/A";
+
+          li.textContent = `${title} | ${date} | ${location} | Capacity: ${capacity}`;
+          eventsList.appendChild(li);
+        });
+      } catch (error) {
+        console.error("Error loading events:", error);
+        eventsList.innerHTML = "<li>Could not load events.</li>";
+      }
     }
 
-    document.getElementById("volunteerForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
+    async function submitVolunteerForm(event) {
+      event.preventDefault();
 
-      await addDoc(collection(db, "volunteer_signups"), {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        availability: document.getElementById("availability").value,
-        skills: document.getElementById("skills").value,
-        status: "new",
-        createdAt: new Date().toISOString()
-      });
+      const formMessage = document.getElementById("formMessage");
+      formMessage.textContent = "";
+      formMessage.className = "";
 
-      alert("Volunteer signup submitted.");
-      document.getElementById("volunteerForm").reset();
-    });
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const availability = document.getElementById("availability").value.trim();
+      const skills = document.getElementById("skills").value.trim();
+
+      try {
+        await addDoc(collection(db, "volunteer_signups"), {
+          name,
+          email,
+          phone,
+          availability,
+          skills,
+          status: "new",
+          createdAt: new Date().toISOString()
+        });
+
+        document.getElementById("volunteerForm").reset();
+        formMessage.textContent = "Volunteer signup submitted successfully.";
+        formMessage.className = "success";
+      } catch (error) {
+        console.error("Error submitting volunteer signup:", error);
+        formMessage.textContent = "There was a problem submitting the form.";
+        formMessage.className = "error";
+      }
+    }
+
+    document.getElementById("volunteerForm").addEventListener("submit", submitVolunteerForm);
 
     loadEvents();
   </script>
