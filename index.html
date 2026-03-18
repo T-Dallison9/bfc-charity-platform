@@ -1,23 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bright Future Charity</title>
 </head>
+  
 <body>
   <h1>Bright Future Charity</h1>
+  <p class="small">
+    Cloud-hosted platform for event listings and volunteer registration.
+  </p>
 
-  <h2>Upcoming Events</h2>
-  <ul id="eventsList"></ul>
+  <div class="card">
+    <h2>Upcoming Events</h2>
+    <ul id="eventsList">
+      <li>Loading events...</li>
+    </ul>
+  </div>
 
-  <h2>Volunteer Signup</h2>
-  <form id="volunteerForm">
-    <input type="text" id="name" placeholder="Name" required><br><br>
-    <input type="email" id="email" placeholder="Email" required><br><br>
-    <input type="text" id="phone" placeholder="Phone"><br><br>
-    <input type="text" id="availability" placeholder="Availability"><br><br>
-    <input type="text" id="skills" placeholder="Skills"><br><br>
-    <button type="submit">Register</button>
-  </form>
+  <div class="card">
+    <h2>Volunteer Signup</h2>
+    <form id="volunteerForm">
+      <label for="name">Name</label>
+      <input type="text" id="name" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required />
+
+      <label for="phone">Phone</label>
+      <input type="text" id="phone" required />
+
+      <label for="availability">Availability</label>
+      <input type="text" id="availability" placeholder="e.g. weekends, evenings" required />
+
+      <label for="skills">Skills</label>
+      <textarea id="skills" rows="4" placeholder="e.g. first aid, admin, fundraising"></textarea>
+
+      <button type="submit">Submit Volunteer Signup</button>
+    </form>
+
+    <p id="formMessage"></p>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
