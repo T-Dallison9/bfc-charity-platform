@@ -4,17 +4,32 @@ const path = require('path');
 
 const port = process.env.PORT || 8080;
 
+const contentTypeByExt = {
+  '.html': 'text/html',
+  '.css': 'text/css',
+  '.js': 'text/javascript',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
+  '.json': 'application/json',
+};
+
 const server = http.createServer((req, res) => {
-  const filePath = path.join(__dirname, 'index.html');
+  const requestPath = req.url === '/' ? '/index.html' : req.url;
+  const filePath = path.join(__dirname, requestPath);
+  const ext = path.extname(filePath).toLowerCase();
 
   fs.readFile(filePath, (err, content) => {
     if (err) {
-      res.writeHead(500, { 'Content-Type': 'text/plain' });
-      res.end('Server error');
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.end('Not found');
       return;
     }
 
-    res.writeHead(200, { 'Content-Type': 'text/html' });
+    const contentType = contentTypeByExt[ext] || 'application/octet-stream';
+    res.writeHead(200, { 'Content-Type': contentType });
     res.end(content);
   });
 });
