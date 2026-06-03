@@ -4,7 +4,9 @@
   "description": "Bright Future Charity platform",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build:css": "tailwindcss -i ./src/input.css -o ./src/output.css",
+    "watch:css": "tailwindcss -i ./src/input.css -o ./src/output.css --watch"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.2.1",
