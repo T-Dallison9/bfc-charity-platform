@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -16,10 +16,14 @@ export default {
         "brand": "#6366F1",
         "fg-brand": "#6366F1",
       },
+      
       borderRadius: {
         "base": "0.375rem",
+      },
+      fontFamily: {
+        sans: ['League Spartan', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'Noto Sans', 'sans-serif'],
       },
     },
   },
   plugins: [],
-}
+};

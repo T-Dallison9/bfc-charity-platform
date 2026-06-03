@@ -31,7 +31,7 @@
     line-height: 1.5;
     -webkit-text-size-adjust: 100%;
     tab-size: 4;
-    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-family: "League Spartan", ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: var(--default-font-feature-settings, normal);
     font-variation-settings: var(--default-font-variation-settings, normal);
     -webkit-tap-highlight-color: transparent;
@@ -169,6 +169,15 @@
   }
 }
 @layer utilities {
+
+  
+  .league-spartan- {
+  font-family: "League Spartan", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <100..900>;
+  font-style: normal;
+  }
+
   .sr-only {
     position: absolute;
     width: 1px;
